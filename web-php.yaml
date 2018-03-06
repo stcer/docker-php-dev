@@ -6,7 +6,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8082:8080
   db:
     image: mysql:5.7
     restart: always
@@ -27,4 +27,11 @@ services:
     ports:
       - 8090:80
     command: /bin/bash -c "nginx -g 'daemon off;'"
+
+  visualizer:
+    image: dockersamples/visualizer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+    ports:
+      - 8081:8080
 
