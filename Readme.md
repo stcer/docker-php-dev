@@ -17,7 +17,7 @@ docker stack deploy -c web-php.yaml web
 
 ## Visit
 - db: http://your_ip:8082
-- visualizer: http://your_ip:8082
+- visualizer: http://your_ip:8081
 - web: http://your_ip:8090
 
 # [optional] Build your php container
