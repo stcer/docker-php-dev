@@ -15,7 +15,7 @@ services:
     volumes:
       - /home/dockers/web-php/mysql:/var/lib/mysql
   php:
-    image: php:7.0-fpm
+    image: php:7.1-fpm
     restart: always
     volumes:
       - /home/dockers/web-php/www:/home/www
@@ -24,6 +24,8 @@ services:
     volumes:
       - /home/dockers/web-php/nginx:/etc/nginx/conf.d
       - /home/dockers/web-php/www:/home/www
+    links:
+      - php
     ports:
       - 8090:80
     command: /bin/bash -c "nginx -g 'daemon off;'"
