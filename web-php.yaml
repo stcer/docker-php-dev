@@ -19,12 +19,14 @@ services:
     restart: always
     volumes:
       - /home/dockers/web-php/www:/home/www
+    deploy:
+      replicas: 2
   web:
     image: nginx
     volumes:
       - /home/dockers/web-php/nginx:/etc/nginx/conf.d
       - /home/dockers/web-php/www:/home/www
-    links:
+    depends_on:
       - php
     ports:
       - 8090:80
