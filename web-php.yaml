@@ -1,31 +1,29 @@
 version: '3'
 
 services:
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8082:8080
   db:
     image: mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - /home/dockers/web-php/mysql:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8091:80
   php:
     image: php:7.1-fpm
-    restart: always
     volumes:
-      - /home/dockers/web-php/www:/home/www
+      - ./www:/home/www
+    deploy:
+      mode: replicated
+      replicas: 2
   web:
     image: nginx
     volumes:
-      - /home/dockers/web-php/nginx:/etc/nginx/conf.d
-      - /home/dockers/web-php/www:/home/www
-    links:
-      - php
+      - ./nginx:/etc/nginx/conf.d
+      - ./www:/home/www
     ports:
       - 8090:80
     command: /bin/bash -c "nginx -g 'daemon off;'"
