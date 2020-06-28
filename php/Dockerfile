@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y \
     && pecl install memcached-2.2.0 \
     && docker-php-ext-enable memcached \
     && pecl install swoole-1.9.10 \
-    && docker-php-ext-enable swoole
-
+    && docker-php-ext-enable swoole \
+    && rm -rf /var/lib/apt/lists/*
 EXPOSE 9000
 CMD ["php-fpm"]
 
