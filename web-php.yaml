@@ -39,12 +39,11 @@ services:
   web:
     image: nginx
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./conf/nginx:/etc/nginx/conf.d
       - ./www:/home/www
     ports:
       - 8090:80
     command: /bin/bash -c "nginx -g 'daemon off;'"
-
   visualizer:
     image: dockersamples/visualizer
     volumes:

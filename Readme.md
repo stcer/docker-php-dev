@@ -22,6 +22,6 @@ docker stack deploy -c web-php.yaml web
 
 # [optional] Build your php container
 ```
-cd php
+cd builder/php
 docker build -t stcer/php-test .
 ```
