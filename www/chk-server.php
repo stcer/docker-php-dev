@@ -21,6 +21,6 @@ foreach($servers as $server) {
     [$host, $port] = $server;
     $rs = checkTcpServer($host, $port);
     if ($rs) {
-        echo "{$host} ok <br />\n";
+        echo "server {$host} ok <br />\n";
     }
 }
