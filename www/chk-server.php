@@ -24,3 +24,5 @@ foreach($servers as $server) {
         echo "server {$host} ok <br />\n";
     }
 }
+
+echo gethostbyname('cdshop');
