@@ -9,11 +9,8 @@ vim /etc/docker/daemon.json
 git clone git@git.jz.cn:jz/docker-php-dev.git YOUR_DIR
 cd YOUR_DIR
 
-# vim web-php.yaml 
-# change your local path
-
 # docker swarm deploy
-docker stack deploy -c web-php.yaml web
+docker stack deploy web
 
 # docker-compose deploy
 docker-compose up -d
