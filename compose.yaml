@@ -42,7 +42,7 @@ services:
       - ./conf/nginx:/etc/nginx/conf.d
       - ./www:/home/www
     ports:
-      - 80:80
+      - 8090:80
     command: /bin/bash -c "nginx -g 'daemon off;'"
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
