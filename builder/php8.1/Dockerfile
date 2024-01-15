@@ -1,6 +1,9 @@
 # Dockerfile
+# @see https://github.com/docker-library/php/blob/641cf9a226ba8447dcf9338d2a19a59f1102967b/8.1/bookworm/fpm/Dockerfile
+# date.timezone = Asia/Shanghai
+# date_default_timezone_set()
 FROM php:8.1-fpm
-
+ENV TZ=Asia/Shanghai
 RUN set -ex && \
     curl -sfL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     chmod +x /usr/bin/composer                                                                     && \
