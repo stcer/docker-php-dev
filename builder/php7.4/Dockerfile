@@ -2,6 +2,7 @@
 FROM php:7.4-fpm
 RUN curl -sfL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     chmod +x /usr/bin/composer                                                                     && \
+    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ && \
     composer self-update --clean-backups 2.2.12                                                     && \
     apt-get update && apt-get install -y \
         libtidy-dev \
