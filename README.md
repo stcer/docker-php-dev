@@ -16,13 +16,9 @@ docker stack deploy web
 docker-compose up -d
 ```
 
-## Visit
-- web: http://your_ip:8090
-- db: http://your_ip:8091
-
-
 # [optional] Build your php container
 ```
 cd builder/php/7.4
+docker pull php:7.4-fpm
 docker build -t stcer/php:7.4-fpm .
 ```
