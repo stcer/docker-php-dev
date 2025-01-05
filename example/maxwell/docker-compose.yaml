@@ -1,0 +1,52 @@
+version: '3.8'
+name: "maxwell-demo"
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: maxwell  # 预创建 maxwell 数据库
+      MYSQL_USER: maxwell
+      MYSQL_PASSWORD: maxwell
+    command: [
+      "--server-id=1",
+      "--log-bin=mysql-bin",
+      "--binlog-format=ROW",
+      "--gtid-mode=ON",
+      "--enforce-gtid-consistency=ON",
+      "--bind-address=0.0.0.0"
+    ]
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-sql:/docker-entrypoint-initdb.d  # 挂载初始化 SQL 目录
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  maxwell:
+    image: zendesk/maxwell
+    container_name: maxwell
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    command: >
+      bin/maxwell --user=maxwell --password=maxwell --host=mysql --producer=redis --redis_host=redis
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: maxwell
+      MYSQL_PASSWORD: maxwell
+      MYSQL_DATABASE: test_db
+      REDIS_HOST: redis
+
+volumes:
+  mysql_data:

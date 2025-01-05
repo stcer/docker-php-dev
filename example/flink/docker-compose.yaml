@@ -1,0 +1,80 @@
+version: "3.8"
+
+name: "flink-demo"
+services:
+  jobmanager:
+    image: flink:1.20.0  # 或者指定具体的 Flink 版本，如 flink:1.20.0
+    container_name: flink-jobmanager
+    ports:
+      - "8081:8081"  # 将 Flink 的 Web UI 端口映射到主机的 8081 端口
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    command: jobmanager
+    volumes:
+      - ./plugs/flink-cdc-pipeline-connector-mysql-3.2.1.jar:/opt/flink/lib/flink-cdc-pipeline-connector-mysql-3.2.1.jar
+      - ./plugs/flink-sql-connector-mysql-cdc-3.2.1.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-3.2.1.jar
+      - ./plugs/mysql-connector-java-8.0.27.jar:/opt/flink/lib/mysql-connector-java-8.0.27.jar
+      - ./plugs/flink-connector-jdbc-3.2.0-1.19.jar:/opt/flink/lib/flink-connector-jdbc-3.2.0-1.19.jar
+    networks:
+      - flink-network
+
+  taskmanager:
+    image: flink:1.20.0  # 或者指定具体的 Flink 版本，与 JobManager 保持一致
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - FLINK_PROPERTIES=taskmanager.numberOfTaskSlots:4
+    command: taskmanager
+    depends_on:
+      - jobmanager
+    deploy:
+      replicas: 2
+    volumes:
+      - ./plugs/flink-cdc-pipeline-connector-mysql-3.2.1.jar:/opt/flink/lib/flink-cdc-pipeline-connector-mysql-3.2.1.jar
+      - ./plugs/flink-sql-connector-mysql-cdc-3.2.1.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-3.2.1.jar
+      - ./plugs/mysql-connector-java-8.0.27.jar:/opt/flink/lib/mysql-connector-java-8.0.27.jar
+      - ./plugs/flink-connector-jdbc-3.2.0-1.19.jar:/opt/flink/lib/flink-connector-jdbc-3.2.0-1.19.jar
+    networks:
+      - flink-network
+
+
+  mysql-source:
+    image: mysql:5.7
+    container_name: mysql-source
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: source_db
+      MYSQL_USER: flink
+      MYSQL_PASSWORD: flink
+    volumes:
+      - ./data/mysql-source-data:/var/lib/mysql
+    command: [
+      "--server-id=1",
+      "--log-bin=mysql-bin",
+      "--binlog-format=ROW",
+      "--gtid-mode=ON",
+      "--enforce-gtid-consistency=ON",
+      "--bind-address=0.0.0.0"
+    ]
+    networks:
+      - flink-network
+
+  mysql-dest:
+    image: mysql:5.7
+    container_name: mysql-dest
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dest_db
+      MYSQL_USER: flink
+      MYSQL_PASSWORD: flink
+    volumes:
+      - ./data/mysql-dest-data:/var/lib/mysql
+    networks:
+      - flink-network
+
+networks:
+  flink-network:
+    driver: bridge

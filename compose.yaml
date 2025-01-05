@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /conf/root-password
@@ -28,7 +28,7 @@ services:
   php:
     depends_on:
       - db
-    image: stcer/php:7.4-fpm
+    image: stcer/php:8.1-fpm
     volumes:
       - ./www:/home/www
     deploy:
