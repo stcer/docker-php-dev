@@ -20,7 +20,7 @@ services:
       "--bind-address=0.0.0.0"
     ]
     ports:
-      - "3306:3306"
+      - "3310:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-sql:/docker-entrypoint-initdb.d  # 挂载初始化 SQL 目录

@@ -5,7 +5,9 @@ CREATE USER IF NOT EXISTS 'maxwell'@'%' IDENTIFIED BY 'maxwell';
 GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO 'maxwell'@'%';
 
 -- 赋予 maxwell 自己数据库的权限
-GRANT ALL PRIVILEGES ON maxwell.* TO 'maxwell'@'%';
+GRANT ALL PRIVILEGES ON *.* TO 'maxwell'@'%';
 
 -- 刷新权限
 FLUSH PRIVILEGES;
+
+create database test_db;
