@@ -4,6 +4,8 @@
 
 ## 参考
 
+- [flink2 doc](https://nightlies.apache.org/flink/flink-docs-master/zh/)
+- [flink-cdc3 doc](https://nightlies.apache.org/flink/flink-cdc-docs-release-3.2/zh/)
 - [cdc版本兼容](https://nightlies.apache.org/flink/flink-cdc-docs-release-3.2/docs/connectors/flink-sources/overview/)
 - [MySQL CDC Connector](https://nightlies.apache.org/flink/flink-cdc-docs-release-3.2/docs/connectors/flink-sources/mysql-cdc/)
 - [cdc jar](https://github.com/apache/flink-cdc/releases)

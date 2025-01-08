@@ -1,0 +1,27 @@
+version: '3.8'
+name: grafana
+services:
+    prometheus:
+        image: prom/prometheus
+        container_name: prometheus
+        hostname: prometheus
+        ports:
+            - 9090:9090
+        volumes:
+            - ./data/prometheus:/prometheus
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    prometheus-exporter:
+        image: prom/node-exporter
+        container_name: service
+        hostname: service
+        ports:
+            - 9100:9100
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        hostname: grafana
+        ports:
+            - 3000:3000
+        volumes:
+            - ./grafana.ini:/etc/grafana/grafana.ini
+            - ./data/grafana:/var/lib/grafana

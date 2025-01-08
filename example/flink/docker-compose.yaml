@@ -48,7 +48,7 @@ services:
       MYSQL_USER: flink
       MYSQL_PASSWORD: flink
     volumes:
-      - ./data/mysql-source-data:/var/lib/mysql
+      - mysql_data_s:/var/lib/mysql
     command: [
       "--server-id=1",
       "--log-bin=mysql-bin",
@@ -71,9 +71,14 @@ services:
       MYSQL_USER: flink
       MYSQL_PASSWORD: flink
     volumes:
-      - ./data/mysql-dest-data:/var/lib/mysql
+      - mysql_data_d:/var/lib/mysql
     networks:
       - flink-network
+
+
+volumes:
+  mysql_data_s:
+  mysql_data_d:
 
 networks:
   flink-network:
