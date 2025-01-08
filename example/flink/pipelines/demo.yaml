@@ -1,0 +1,21 @@
+source:
+    type: mysql
+    name: MySQL Source
+    hostname: mysql-source
+    port: 3306
+    username: flink
+    password: flink
+    tables: source_db.\.*
+    server-id: 5401-5404
+
+sink:
+    type: mysql
+    name: MySQL Sink
+    hostname: mysql-dest
+    port: 3306
+    username: flink
+    password: flink
+
+pipeline:
+    name: MySQL to mysql Pipeline
+    parallelism: 4

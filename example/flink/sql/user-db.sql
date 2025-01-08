@@ -1,7 +1,8 @@
 -- docker exec -it mysql-source mysql -u root -proot
 CREATE USER 'flink'@'%' IDENTIFIED BY 'flink';
-GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'flink'@'%';
+GRANT SELECT, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'flink'@'%';
 FLUSH PRIVILEGES;
+SHOW GRANTS FOR 'flink'@'%';
 
 -- 创建源表
 CREATE TABLE source_db.users

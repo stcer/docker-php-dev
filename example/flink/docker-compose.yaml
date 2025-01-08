@@ -11,6 +11,7 @@ services:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
     command: jobmanager
     volumes:
+      - ./pipelines:/pipelines
       - ./plugs/flink-cdc-pipeline-connector-mysql-3.2.1.jar:/opt/flink/lib/flink-cdc-pipeline-connector-mysql-3.2.1.jar
       - ./plugs/flink-sql-connector-mysql-cdc-3.2.1.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-3.2.1.jar
       - ./plugs/mysql-connector-java-8.0.27.jar:/opt/flink/lib/mysql-connector-java-8.0.27.jar

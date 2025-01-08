@@ -1,0 +1,78 @@
+version: "3.9"
+name: dinky
+
+services:
+    dinky:
+        image: "dinkydocker/dinky-standalone-server:${DINKY_VERSION}-flink${FLINK_VERSION}"
+        ports:
+            - "8888:8888"
+        env_file: .env
+        networks:
+            - dinky
+        volumes:
+            - ${CUSTOM_JAR_PATH}:/opt/dinky/customJar/
+
+    jobmanager:
+        image: flink:${FLINK_VERSION}-scala_2.12-java8
+        ports:
+            - "8081:8081"
+        command: jobmanager
+        env_file: .env
+        volumes:
+            - ${CUSTOM_JAR_PATH}:/opt/flink/lib/customJar/
+        networks:
+            - dinky
+
+    taskmanager:
+        image: flink:${FLINK_VERSION}-scala_2.12-java8
+        command: taskmanager
+        env_file: .env
+        volumes:
+            - ${CUSTOM_JAR_PATH}:/opt/flink/lib/customJar/
+        networks:
+            - dinky
+
+    mysql-source:
+        image: mysql:5.7
+        container_name: mysql-source
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: source_db
+            MYSQL_USER: flink
+            MYSQL_PASSWORD: flink
+        volumes:
+            - mysql_data_s:/var/lib/mysql
+        command: [
+            "--server-id=1",
+            "--log-bin=mysql-bin",
+            "--binlog-format=ROW",
+            "--gtid-mode=ON",
+            "--enforce-gtid-consistency=ON",
+            "--bind-address=0.0.0.0"
+        ]
+        networks:
+            - dinky
+
+    mysql-dest:
+        image: mysql:5.7
+        container_name: mysql-dest
+        ports:
+            - "3308:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: dest_db
+            MYSQL_USER: flink
+            MYSQL_PASSWORD: flink
+        volumes:
+            - mysql_data_d:/var/lib/mysql
+        networks:
+            - dinky
+
+volumes:
+    mysql_data_s:
+    mysql_data_d:
+
+networks:
+    dinky:
