@@ -10,12 +10,25 @@ services:
         volumes:
             - ./data/prometheus:/prometheus
             - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
     prometheus-exporter:
         image: prom/node-exporter
         container_name: service
         hostname: service
         ports:
             - 9100:9100
+
+    prometheus-mysql-exporter:
+        image: prom/mysqld-exporter
+        container_name: prometheus-mysql-exporter
+        ports:
+            - 9104:9104
+        command:
+            - "--mysqld.username=root:root"
+            - "--mysqld.address=192.168.0.178:3306"
+        environment:
+            DATA_SOURCE_NAME: "root:root@tcp(192.168.0.178:3306)/mysql?parseTime=true"
+
     grafana:
         image: grafana/grafana
         container_name: grafana
