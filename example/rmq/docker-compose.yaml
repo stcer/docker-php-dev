@@ -1,0 +1,24 @@
+version: "3.9"
+name: "rmq-demo"
+
+services:
+  rmq:
+    image: rabbitmq:3.8.0-management
+    environment:
+      RABBITMQ_DEFAULT_VHOST: vhost_demo
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+      # RABBITMQ_DEFAULT_PASS_FILE: /admin-password
+    #volumes:
+      #- ./data/rmq:/var/lib/rabbitmq
+      # - ./admin-password:/admin-password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  php:
+    depends_on:
+      - rmq
+    image: stcer/php:8.2-fpm
+    volumes:
+      - ./php:/var/www/html
