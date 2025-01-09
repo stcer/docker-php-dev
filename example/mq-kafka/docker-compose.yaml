@@ -40,6 +40,8 @@ services:
 
         ports:
             - 8080:8080
+        depends_on:
+            - kafka
     php:
         image: stcer/php:8.2-fpm
         volumes:
