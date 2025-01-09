@@ -1,0 +1,46 @@
+version: "3.9"
+name: "kafka-demo"
+
+services:
+    zookeeper:
+        image: confluentinc/cp-zookeeper:latest
+        container_name: zookeeper
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+
+    kafka:
+        image: confluentinc/cp-kafka:latest
+        container_name: kafka
+        ports:
+            - "9092:9092"
+        environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        depends_on:
+            - zookeeper
+    akhq:
+        # build:
+        #   context: .
+        image: tchiotludo/akhq
+        restart: unless-stopped
+        environment:
+            AKHQ_CONFIGURATION: |
+                akhq:
+                  connections:
+                    docker-kafka-server:
+                      properties:
+                        bootstrap.servers: "kafka:9092"
+                      schema-registry:
+                        url: "http://schema-registry:8085"
+                      connect:
+                        - name: "connect"
+                          url: "http://connect:8083"
+
+        ports:
+            - 8080:8080
+    php:
+        image: stcer/php:8.2-fpm
+        volumes:
+            - ./php:/var/www/html

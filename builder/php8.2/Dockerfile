@@ -17,16 +17,12 @@ RUN set -ex && \
         libjpeg62-turbo-dev \
         libpng-dev && \
     docker-php-ext-install -j$(nproc) iconv pdo_mysql mysqli bcmath pcntl sockets tidy zip gettext calendar && \
-    docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install -j$(nproc) gd && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install -j$(nproc) gd &&  \
     pecl channel-update pecl.php.net && \
-    pecl install --configureoptions 'enable-redis-igbinary="no" enable-redis-lzf="no" enable-redis-zstd="no"' redis-6.0.1 && \
-    docker-php-ext-enable redis && \
-    apt-get install -y libmemcached-dev libssl-dev zlib1g-dev && \
-    pecl install memcached-3.2.0 && \
-    docker-php-ext-enable memcached && \
-    pecl install swoole && \
-    docker-php-ext-enable swoole && \
+    pecl install --configureoptions 'enable-redis-igbinary="no" enable-redis-lzf="no" enable-redis-zstd="no"' redis-6.0.1 && docker-php-ext-enable redis && \
+    apt-get install -y libmemcached-dev libssl-dev zlib1g-dev && pecl install memcached-3.2.0 && docker-php-ext-enable memcached && \
+    apt-get install -y librdkafka-dev && pecl install rdkafka && docker-php-ext-enable rdkafka && \
+    pecl install swoole && docker-php-ext-enable swoole && \
     rm -rf /var/lib/apt/lists/*
 EXPOSE 9000
 CMD ["php-fpm"]
