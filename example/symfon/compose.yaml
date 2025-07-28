@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  php:
+    image: stcer/php:8.4-fpm-dev
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8000:8000"
+    working_dir: /var/www/html/v7
+    command: >
+      symfony server:start --no-tls --allow-http --allow-all-ip --port=8000
