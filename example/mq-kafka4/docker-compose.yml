@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+    php:
+        image: stcer/php:8.2-fpm
+        container_name: php-cli
+        command: [ "bash" ]
+        tty: true
+        stdin_open: true
+        volumes:
+            - ./app:/app
+        working_dir: /app
+        depends_on:
+            - kafka1
+            - kafka2
+        networks:
+            - kafka-net
+
+    kafka1:
+        image: bitnami/kafka:4.0
+        container_name: kafka1
+        environment:
+            KAFKA_ENABLE_KRAFT: "yes"
+            KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+            KAFKA_CFG_NODE_ID: "1"
+            KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093"
+            KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+            KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://kafka1:9092"
+            KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT"
+            KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+            KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+            KAFKA_KRAFT_CLUSTER_ID: "kraft-cluster-1234"
+            ALLOW_PLAINTEXT_LISTENER: "yes"
+            KAFKA_HEAP_OPTS: "-Xmx256m -Xms256m"
+        ports:
+            - "9092:9092"
+        volumes:
+            - kafka1-data:/bitnami/kafka
+        networks:
+            - kafka-net
+
+    kafka2:
+        image: bitnami/kafka:4.0
+        container_name: kafka2
+        environment:
+            KAFKA_ENABLE_KRAFT: "yes"
+            KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+            KAFKA_CFG_NODE_ID: "2"
+            KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093"
+            KAFKA_CFG_LISTENERS: "PLAINTEXT://:9094,CONTROLLER://:9093"
+            KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://kafka2:9094"
+            KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT"
+            KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+            KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+            KAFKA_KRAFT_CLUSTER_ID: "kraft-cluster-1234"
+            ALLOW_PLAINTEXT_LISTENER: "yes"
+            KAFKA_HEAP_OPTS: "-Xmx256m -Xms256m"
+        ports:
+            - "9094:9094"
+        volumes:
+            - kafka2-data:/bitnami/kafka
+        networks:
+            - kafka-net
+
+    kafka-ui:
+        image: provectuslabs/kafka-ui:latest
+        container_name: kafka-ui
+        ports:
+            - "8080:8080"
+        environment:
+            - KAFKA_CLUSTERS_0_NAME=kafka4
+            - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092,kafka2:9094
+        depends_on:
+            - kafka1
+            - kafka2
+        networks:
+            - kafka-net
+
+volumes:
+    kafka1-data:
+    kafka2-data:
+
+networks:
+    kafka-net:
+        driver: bridge

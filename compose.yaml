@@ -9,18 +9,18 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./conf/mysql:/conf
-  rmq:
-    image: rabbitmq:3.8.0-management
-    environment:
-      RABBITMQ_DEFAULT_VHOST: my_vhost
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS_FILE: /conf/admin-password
-    volumes:
-      - ./data/rmq:/var/lib/rabbitmq
-      - ./conf/rmq:/conf
-    ports:
-      - 5672:5672
-      - 15672:15672
+#  rmq:
+#    image: rabbitmq:3.8.0-management
+#    environment:
+#      RABBITMQ_DEFAULT_VHOST: my_vhost
+#      RABBITMQ_DEFAULT_USER: admin
+#      RABBITMQ_DEFAULT_PASS_FILE: /conf/admin-password
+#    volumes:
+#      - ./data/rmq:/var/lib/rabbitmq
+#      - ./conf/rmq:/conf
+#    ports:
+#      - 5672:5672
+#      - 15672:15672
   redis:
     image: redis:alpine
     volumes:
@@ -28,7 +28,7 @@ services:
   php:
     depends_on:
       - db
-    image: stcer/php:8.1-fpm
+    image: stcer/php:8.4-fpm
     volumes:
       - ./www:/home/www
     deploy:
