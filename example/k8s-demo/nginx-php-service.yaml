@@ -1,0 +1,15 @@
+# 文件名：nginx-php-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-svc
+spec:
+  selector:
+    app: webapp
+  type: NodePort
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080

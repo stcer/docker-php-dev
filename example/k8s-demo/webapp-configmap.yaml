@@ -1,0 +1,10 @@
+# 文件名：webapp-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-files
+data:
+  index.php: |
+    <?php
+    phpinfo();
+    ?>

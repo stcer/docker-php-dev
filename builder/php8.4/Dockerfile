@@ -11,7 +11,6 @@ RUN set -ex && \
     composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ && \
     apt-get update && apt-get install -y --no-install-recommends \
         libtidy-dev \
-        libtidy-dev \
         libzip-dev \
         libfreetype-dev \
         libjpeg62-turbo-dev \

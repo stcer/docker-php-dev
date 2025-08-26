@@ -10,7 +10,6 @@ RUN set -ex && \
     composer self-update --clean-backups 2.2.12                                                     && \
     apt-get update && apt-get install -y --no-install-recommends \
         libtidy-dev \
-        libtidy-dev \
         libzip-dev \
         libfreetype-dev \
         libjpeg62-turbo-dev \
